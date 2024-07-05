@@ -25,6 +25,7 @@
 #ifdef AR_OSAL_USE_CUTILS
 #include <cutils/properties.h>
 #endif
+#include <errno.h>
 
  #ifdef __cplusplus
  extern "C" {
@@ -339,12 +340,12 @@ ar_osal_servreg_t ar_osal_servreg_register(_In_ ar_osal_client_type  client_type
     _In_ ar_osal_servreg_entry_type *domain,
     _In_ ar_osal_servreg_entry_type *service)
 {
-#ifndef AR_OSAL_USE_PD_NOTIFIER
-    return 1;
-#else
     int32_t status = AR_EOK;
     //ar_osal_servreg_t* handle = NULL;
     ar_osal_service_node* srv_reg_handle = NULL;
+#ifndef AR_OSAL_USE_PD_NOTIFIER
+    return (ar_osal_servreg_t)srv_reg_handle;
+#else
     enum pd_rcode pd_rc = PD_NOTIFIER_FAIL;
     pd_state state = SERVREG_NOTIF_SERVICE_STATE_DOWN_V01;
 
